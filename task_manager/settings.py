@@ -84,10 +84,14 @@ WSGI_APPLICATION = 'task_manager.wsgi.application'
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
 DATABASES = {
-    'default': dj_database_url.config(
-        default='postgres://postgres:Kavi100%40@localhost:5432/ttm',
-        conn_max_age=600
-    )
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'ttm',
+        'USER': 'postgres',
+        'PASSWORD': 'Kavi100@',
+        'HOST': 'localhost',
+        'PORT': '5432',
+    }
 }
 
 
