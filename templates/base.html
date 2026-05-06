@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Team Task Manager</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .glass { background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 font-sans h-screen flex flex-col">
+
+    <!-- Navbar -->
+    <nav class="glass border-b border-slate-200 px-6 py-4 flex justify-between items-center sticky top-0 z-50">
+        <a href="{% url 'dashboard' %}" class="text-2xl font-bold text-blue-600 tracking-tight">Team Task Manager</a>
+        <div>
+            {% if user.is_authenticated %}
+                <span class="mr-4 font-medium">{{ user.username }} ({{ user.role }})</span>
+                <form action="{% url 'logout' %}" method="post" class="inline">
+                    {% csrf_token %}
+                    <button type="submit" class="text-sm text-red-600 hover:underline">Logout</button>
+                </form>
+            {% else %}
+                <a href="{% url 'login' %}" class="text-sm text-blue-600 hover:underline mr-4">Login</a>
+                <a href="{% url 'register' %}" class="text-sm bg-blue-600 text-white px-3 py-2 rounded hover:bg-blue-700">Register</a>
+            {% endif %}
+        </div>
+    </nav>
+
+    <!-- Main Container -->
+    <main class="flex-grow p-6 overflow-y-auto max-w-6xl mx-auto w-full">
+        {% block content %}{% endblock %}
+    </main>
+
+</body>
+</html>

@@ -1,14 +1,14 @@
 # Team Task Manager
 
-A Full-Stack Team Task Manager built with Django, Django Rest Framework, PostgreSQL, and Vanilla JavaScript with TailwindCSS.
+A Full-Stack Team Task Manager built completely with Django and PostgreSQL, using standard server-side rendered HTML templates and TailwindCSS for styling.
 
 ## Features
-- **Authentication**: JWT-based login and registration.
+- **Authentication**: Django session-based login and registration.
 - **Role-Based Access**: 
   - `Admin`: Can create projects, create tasks, and assign them to members.
   - `Member`: Can view assigned tasks and update their status.
 - **Dashboard**: Track tasks, statuses, and overdue items.
-- **API**: Full REST API built with Django Rest Framework.
+- **Architecture**: Traditional Django Model-View-Template (MVT) structure without external APIs.
 
 ## Local Setup
 

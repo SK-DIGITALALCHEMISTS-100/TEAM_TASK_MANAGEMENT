@@ -1,18 +1,15 @@
-from django.urls import path, include
-from rest_framework.routers import DefaultRouter
-from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
-from .views import register_user, me, UserViewSet, ProjectViewSet, TaskViewSet, dashboard_stats
-
-router = DefaultRouter()
-router.register(r'users', UserViewSet)
-router.register(r'projects', ProjectViewSet)
-router.register(r'tasks', TaskViewSet, basename='task')
+from django.urls import path
+from django.contrib.auth import views as auth_views
+from . import views
 
 urlpatterns = [
-    path('auth/register/', register_user, name='register'),
-    path('auth/login/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
-    path('auth/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
-    path('auth/me/', me, name='me'),
-    path('dashboard/', dashboard_stats, name='dashboard_stats'),
-    path('', include(router.urls)),
+    path('register/', views.register, name='register'),
+    path('login/', auth_views.LoginView.as_view(template_name='registration/login.html'), name='login'),
+    path('logout/', auth_views.LogoutView.as_view(), name='logout'),
+    
+    path('', views.dashboard, name='dashboard'),
+    path('projects/create/', views.ProjectCreateView.as_view(), name='create_project'),
+    path('tasks/create/', views.TaskCreateView.as_view(), name='create_task'),
+    path('tasks/<int:pk>/update-status/', views.TaskUpdateStatusView.as_view(), name='update_task_status'),
+    path('tasks/<int:pk>/delete/', views.delete_task, name='delete_task'),
 ]

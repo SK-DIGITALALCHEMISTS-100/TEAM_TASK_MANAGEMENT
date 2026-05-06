@@ -1,0 +1,91 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="space-y-6">
+    <div class="flex justify-between items-center">
+        <h1 class="text-3xl font-bold">Dashboard</h1>
+    </div>
+
+    <!-- Stats -->
+    <div class="grid grid-cols-1 md:grid-cols-5 gap-4">
+        <div class="p-4 rounded-xl bg-blue-50 text-blue-600 border border-blue-100">
+            <div class="text-xs font-bold mb-1 opacity-70">TOTAL</div>
+            <div class="text-3xl font-black">{{ total }}</div>
+        </div>
+        <div class="p-4 rounded-xl bg-amber-50 text-amber-600 border border-amber-100">
+            <div class="text-xs font-bold mb-1 opacity-70">PENDING</div>
+            <div class="text-3xl font-black">{{ pending }}</div>
+        </div>
+        <div class="p-4 rounded-xl bg-purple-50 text-purple-600 border border-purple-100">
+            <div class="text-xs font-bold mb-1 opacity-70">IN PROGRESS</div>
+            <div class="text-3xl font-black">{{ in_progress }}</div>
+        </div>
+        <div class="p-4 rounded-xl bg-emerald-50 text-emerald-600 border border-emerald-100">
+            <div class="text-xs font-bold mb-1 opacity-70">COMPLETED</div>
+            <div class="text-3xl font-black">{{ completed }}</div>
+        </div>
+        <div class="p-4 rounded-xl bg-red-50 text-red-600 border border-red-100">
+            <div class="text-xs font-bold mb-1 opacity-70">OVERDUE</div>
+            <div class="text-3xl font-black">{{ overdue }}</div>
+        </div>
+    </div>
+
+    <!-- Admin Controls -->
+    {% if user.role == 'Admin' %}
+    <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-100">
+        <h2 class="text-xl font-semibold mb-4">Admin Controls</h2>
+        <div class="flex gap-4">
+            <a href="{% url 'create_project' %}" class="bg-slate-800 text-white px-4 py-2 rounded hover:bg-slate-700 transition">Create Project</a>
+            <a href="{% url 'create_task' %}" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition">Create Task</a>
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- Tasks List -->
+    <div class="bg-white rounded-xl shadow-sm border border-slate-100 p-6">
+        <h2 class="text-xl font-semibold mb-4">Your Tasks</h2>
+        <div class="overflow-x-auto">
+            <table class="w-full text-left border-collapse">
+                <thead>
+                    <tr class="border-b border-slate-200 text-slate-500 text-sm">
+                        <th class="pb-3 font-medium">Title</th>
+                        <th class="pb-3 font-medium">Project</th>
+                        <th class="pb-3 font-medium">Assigned To</th>
+                        <th class="pb-3 font-medium">Due Date</th>
+                        <th class="pb-3 font-medium">Status</th>
+                        <th class="pb-3 font-medium">Action</th>
+                    </tr>
+                </thead>
+                <tbody class="text-sm">
+                    {% for task in tasks %}
+                    <tr class="border-b border-slate-50 hover:bg-slate-50 transition">
+                        <td class="py-3 font-medium">{{ task.title }}</td>
+                        <td class="py-3 text-slate-500">{{ task.project.name }}</td>
+                        <td class="py-3 text-slate-500">{% if task.assigned_to %}{{ task.assigned_to.username }}{% else %}Unassigned{% endif %}</td>
+                        <td class="py-3 text-slate-500">{{ task.due_date }}</td>
+                        <td class="py-3">
+                            <span class="text-xs px-2 py-1 rounded-full font-medium 
+                            {% if task.status == 'Pending' %}bg-amber-100 text-amber-800
+                            {% elif task.status == 'In Progress' %}bg-purple-100 text-purple-800
+                            {% elif task.status == 'Completed' %}bg-emerald-100 text-emerald-800
+                            {% else %}bg-red-100 text-red-800{% endif %}">
+                                {{ task.status }}
+                            </span>
+                        </td>
+                        <td class="py-3 flex gap-2">
+                            <a href="{% url 'update_task_status' task.id %}" class="text-blue-600 hover:text-blue-800">Update Status</a>
+                            {% if user.role == 'Admin' %}
+                                | <a href="{% url 'delete_task' task.id %}" class="text-red-500 hover:text-red-700">Delete</a>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="6" class="py-4 text-center text-slate-500">No tasks found.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}
