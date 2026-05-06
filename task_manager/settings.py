@@ -32,6 +32,7 @@ SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-$iaha#7r^*(t=(vo8fk03
 DEBUG = os.environ.get('DEBUG', 'True') == 'True'
 
 ALLOWED_HOSTS = ['*'] # In production, restrict this to your domain
+CSRF_TRUSTED_ORIGINS = ['https://*.up.railway.app']
 
 
 # Application definition
